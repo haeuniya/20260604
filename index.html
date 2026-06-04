@@ -1,1 +1,1041 @@
-test
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>럭키 스팟 – 티머니GO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card-bg: #111827;
+    --accent: #00e5b4;
+    --accent2: #ffd166;
+    --accent3: #ff6b6b;
+    --text: #f0f4ff;
+    --text-muted: #8892a4;
+    --border: rgba(255,255,255,0.07);
+    --radius: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  /* Subtle background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,180,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,180,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .phone-wrap {
+    position: relative;
+    width: 390px;
+    min-height: 780px;
+    z-index: 1;
+  }
+
+  /* ── STEP SCREENS ── */
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    overflow: hidden;
+  }
+  .screen.active {
+    opacity: 1;
+    pointer-events: all;
+    position: relative;
+  }
+
+  /* ── STEP 1: 진입 ── */
+  #s1 {
+    background: linear-gradient(160deg, #0d1526 0%, #0a0e1a 60%);
+    padding: 60px 28px 48px;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-radius: 40px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+  .app-logo {
+    background: var(--accent);
+    color: #000;
+    font-weight: 900;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+  }
+  .app-name { color: var(--text-muted); font-size: 14px; font-weight: 600; }
+
+  .hero-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0 32px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .hero-title .highlight {
+    color: var(--accent);
+    position: relative;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  /* Track dots */
+  .track {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+  }
+  .track-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .track-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+
+  /* Main CTA */
+  .btn-main {
+    width: 100%;
+    padding: 20px 24px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: -0.3px;
+    box-shadow: 0 8px 32px rgba(0,229,180,0.3);
+  }
+  .btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,229,180,0.45);
+  }
+  .btn-main:active { transform: translateY(0); }
+  .btn-main .arrow {
+    width: 36px; height: 36px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  /* decoration icons */
+  .deco-icons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .deco-chip {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.03);
+  }
+  .deco-chip span { font-size: 16px; }
+
+  /* ── STEP 2: 로딩 ── */
+  #s2 {
+    background: #0a0e1a;
+    padding: 60px 28px 48px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    gap: 0;
+  }
+
+  .slot-machine {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    position: relative;
+  }
+  .slot-machine::before,
+  .slot-machine::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 48px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .slot-machine::before { top: 0; background: linear-gradient(to bottom, var(--card-bg), transparent); }
+  .slot-machine::after  { bottom: 0; background: linear-gradient(to top,   var(--card-bg), transparent); }
+
+  .slot-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .slot-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    height: 72px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slot-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    height: 72px;
+    position: relative;
+  }
+
+  .slot-col .reel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    will-change: transform;
+  }
+
+  .slot-item {
+    height: 72px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--text);
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  .slot-highlight {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; height: 72px;
+    border: 2px solid rgba(0,229,180,0.4);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 3;
+    box-shadow: inset 0 0 20px rgba(0,229,180,0.05);
+  }
+
+  .loading-text {
+    font-size: 15px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .loading-text strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .loading-bar-wrap {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .loading-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    animation: load-progress 1.8s ease-out forwards;
+  }
+  @keyframes load-progress {
+    0%   { width: 0%; }
+    60%  { width: 70%; }
+    100% { width: 100%; }
+  }
+
+  /* ── STEP 3: 결과 ── */
+  #s3 {
+    background: #0a0e1a;
+    padding: 52px 28px 40px;
+    border-radius: 40px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+
+  .result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .result-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .result-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .result-date { font-size: 13px; color: var(--text-muted); }
+
+  /* Result card */
+  .result-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .transport-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(0,229,180,0.1);
+    border: 1px solid rgba(0,229,180,0.2);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .spot-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .spot-number .unit {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .spot-desc {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #c8d4e8;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .spot-desc .keyword {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  /* Fortune tags */
+  .fortune-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .ftag {
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .ftag.hot { background: rgba(255,107,107,0.1); color: #ff8e8e; border-color: rgba(255,107,107,0.2); }
+  .ftag.gold { background: rgba(255,209,102,0.1); color: var(--accent2); border-color: rgba(255,209,102,0.2); }
+
+  /* CTA button – result */
+  .btn-cta {
+    width: 100%;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #00e5b4, #00c49a);
+    color: #000;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: -0.3px;
+    box-shadow: 0 8px 32px rgba(0,229,180,0.3);
+    margin-bottom: 12px;
+  }
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(0,229,180,0.45);
+  }
+  .reward-badge {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: var(--text);
+  }
+
+  /* ── STEP 4: 보상 ── */
+  #s4 {
+    background: #0a0e1a;
+    padding: 52px 28px 48px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    text-align: center;
+  }
+
+  .fanfare-icon {
+    font-size: 72px;
+    margin-bottom: 8px;
+    animation: bounce-in 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes bounce-in {
+    0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg);  opacity: 1; }
+  }
+
+  .reward-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+  }
+  .reward-title .m-accent { color: var(--accent); }
+
+  .reward-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .mileage-card {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mileage-card::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,180,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .mileage-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .mileage-label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  .mileage-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .mileage-unit { font-size: 18px; color: var(--text-muted); }
+
+  .mileage-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0;
+  }
+
+  .mileage-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mileage-total-label { font-size: 13px; color: var(--text-muted); }
+  .mileage-total-value {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+  }
+
+  /* Confetti particles */
+  .confetti-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 40px;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: confetti-fall 1.8s ease-in forwards;
+    opacity: 0;
+  }
+  @keyframes confetti-fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(800px) rotate(720deg); opacity: 0; }
+  }
+
+  .btn-done {
+    width: 100%;
+    padding: 20px 24px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 8px 32px rgba(0,229,180,0.3);
+  }
+  .btn-done:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,229,180,0.45); }
+
+  /* Progress indicator */
+  .step-indicator {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 24px;
+  }
+  .step-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s, width 0.3s;
+  }
+  .step-dot.active { background: var(--accent); width: 18px; border-radius: 3px; }
+
+  /* Transition helpers */
+  .screen { transition: opacity 0.35s ease; }
+
+  /* Tab selector */
+  .tab-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .tab-btn.active {
+    background: rgba(0,229,180,0.1);
+    border-color: rgba(0,229,180,0.3);
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-wrap">
+
+  <!-- ── STEP 1: 진입 ── -->
+  <div class="screen active" id="s1">
+    <div class="app-header">
+      <span class="app-logo">T</span>
+      <span class="app-name">티머니GO</span>
+    </div>
+
+    <div class="hero-section">
+      <div class="eyebrow">Lucky Spot</div>
+      <h1 class="hero-title">
+        오늘 나를<br>
+        <span class="highlight">행운으로 이끌</span><br>
+        탑승 위치
+      </h1>
+      <p class="hero-desc">
+        오늘의 이동 운세를 분석해<br>
+        당신만의 럭키 스팟을 알려드립니다.
+      </p>
+
+      <div class="deco-icons">
+        <div class="deco-chip"><span>🚇</span> 지하철</div>
+        <div class="deco-chip"><span>🚌</span> 버스</div>
+        <div class="deco-chip"><span>✨</span> 행운운세</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="track">
+        <div class="track-dot active"></div>
+        <div class="track-dot"></div>
+        <div class="track-dot"></div>
+        <div class="track-dot"></div>
+      </div>
+      <button class="btn-main" onclick="goStep(2)">
+        오늘 나의 행운 탑승 위치는?
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: 로딩 ── -->
+  <div class="screen" id="s2">
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;">
+
+      <div style="font-size:13px; color:var(--text-muted); font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:28px; text-align:center;">
+        ANALYZING YOUR LUCK
+      </div>
+
+      <div class="slot-machine">
+        <div class="slot-label">오늘의 탑승 칸 번호</div>
+        <div class="slot-row" id="slotRow">
+          <div class="slot-col" id="col1"><div class="reel" id="reel1"></div></div>
+          <div class="slot-col" style="max-width:28px; flex:none; color:var(--text-muted); font-size:28px; font-weight:900; display:flex; align-items:center; justify-content:center; overflow:visible;">-</div>
+          <div class="slot-col" id="col2"><div class="reel" id="reel2"></div></div>
+        </div>
+        <div class="slot-highlight"></div>
+      </div>
+
+      <div class="loading-text" id="loadingTxt">
+        <strong>오늘의 럭키 스팟 분석 중...</strong>
+      </div>
+
+      <div style="width:100%; margin-top:16px;">
+        <div class="loading-bar-wrap">
+          <div class="loading-bar" id="loadBar"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="step-indicator">
+      <div class="step-dot"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: 결과 ── -->
+  <div class="screen" id="s3">
+    <div class="result-top">
+      <div class="result-badge">오늘의 럭키 스팟</div>
+      <div class="result-date" id="todayDate"></div>
+    </div>
+
+    <!-- Transport tab -->
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabSubway" onclick="switchTab('subway')">🚇 지하철</button>
+      <button class="tab-btn" id="tabBus" onclick="switchTab('bus')">🚌 버스</button>
+    </div>
+
+    <!-- Result card -->
+    <div class="result-card" id="resultCard">
+      <div class="transport-tag" id="transportTag">🚇 &nbsp;2호선</div>
+      <div class="spot-number" id="spotNumber">
+        2<span style="font-family:'Noto Sans KR'; font-size:28px; font-weight:900; color:var(--text-muted);">-</span>1
+        <span class="unit">칸</span>
+      </div>
+      <div class="spot-desc" id="spotDesc">
+        오늘은 2호선 <strong>[2-1]</strong> 칸에 탑승해 보세요.<br>
+        출입문 쪽에 기대어 가면, 막혀있던 <span class="keyword">업무 아이디어</span>가 번쩍 떠오르는 날입니다.
+      </div>
+      <div class="fortune-tags" id="fortuneTags">
+        <span class="ftag hot">🔥 업무운 상승</span>
+        <span class="ftag gold">💡 아이디어운</span>
+        <span class="ftag">🍀 귀인 출현</span>
+      </div>
+    </div>
+
+    <button class="btn-cta" onclick="goStep(4)">
+      운세 확인 완료! 10M 받기
+      <span class="reward-badge">+10 <span style="font-size:11px">M</span></span>
+    </button>
+    <button class="btn-secondary" onclick="goStep(1)">다시 뽑기</button>
+
+    <div class="step-indicator" style="margin-top:16px;">
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: 보상 ── -->
+  <div class="screen" id="s4">
+    <div class="confetti-wrap" id="confettiWrap"></div>
+
+    <div class="fanfare-icon">🎊</div>
+    <h2 class="reward-title">
+      출근길<br><span class="m-accent">행운 충전 완료!</span>
+    </h2>
+    <p class="reward-sub">
+      오늘도 좋은 하루 되세요.<br>
+      마일리지 10M이 적립되었습니다.
+    </p>
+
+    <div class="mileage-card">
+      <div class="mileage-row">
+        <div class="mileage-label">오늘 적립 마일리지</div>
+        <div>
+          <span class="mileage-value">+10</span>
+          <span class="mileage-unit"> M</span>
+        </div>
+      </div>
+      <div class="mileage-divider"></div>
+      <div class="mileage-total-row">
+        <div class="mileage-total-label">누적 마일리지</div>
+        <div class="mileage-total-value">1,240 M</div>
+      </div>
+    </div>
+
+    <button class="btn-done" onclick="goStep(1)">홈으로 돌아가기</button>
+
+    <div class="step-indicator" style="margin-top:24px;">
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot active"></div>
+    </div>
+  </div>
+
+</div><!-- /phone-wrap -->
+
+<script>
+  // Date
+  const d = new Date();
+  const opts = { month: 'long', day: 'numeric', weekday: 'short' };
+  document.getElementById('todayDate').textContent =
+    d.toLocaleDateString('ko-KR', opts);
+
+  let currentStep = 1;
+
+  function goStep(n) {
+    const prev = document.getElementById('s' + currentStep);
+    prev.classList.remove('active');
+    prev.style.position = 'absolute';
+    prev.style.inset = '0';
+
+    currentStep = n;
+    const next = document.getElementById('s' + n);
+    next.style.position = 'relative';
+    next.style.inset = 'auto';
+    next.classList.add('active');
+
+    if (n === 2) startLoading();
+    if (n === 4) spawnConfetti();
+  }
+
+  // ── SLOT MACHINE (RAF-based) ──
+  const ITEM_H = 72;
+  const SYMBOLS = [['1','2','3','4','5','6','7','8','9','10'],['1','2','3','4']];
+  const TARGETS = ['2', '1']; // final result: 2-1
+
+  let reelStates = [null, null];
+
+  function buildReel(reelEl, symbols) {
+    reelEl.innerHTML = '';
+    // triple the list so we can loop seamlessly
+    const full = [...symbols, ...symbols, ...symbols];
+    full.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'slot-item';
+      div.textContent = s;
+      reelEl.appendChild(div);
+    });
+    reelEl.style.transform = 'translateY(0px)';
+  }
+
+  function spinReel(reelEl, symbols, targetVal, duration, onDone) {
+    const itemCount = symbols.length;
+    const totalItems = itemCount * 3; // triple list
+    const totalH = totalItems * ITEM_H;
+    const singleH = itemCount * ITEM_H;
+
+    // Find target index in second copy
+    const targetIdx = itemCount + symbols.indexOf(targetVal);
+    const targetY = -(targetIdx * ITEM_H);
+
+    let start = null;
+    let currentY = 0;
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    // Fast spin phase then ease to target
+    const fastSpins = singleH * 3; // distance to spin fast
+    const fastDuration = duration * 0.6;
+    const easeDuration = duration * 0.4;
+
+    function step(ts) {
+      if (!start) start = ts;
+      const elapsed = ts - start;
+
+      if (elapsed < fastDuration) {
+        // Fast constant scroll
+        const progress = elapsed / fastDuration;
+        currentY = -(progress * fastSpins) % singleH;
+        reelEl.style.transform = `translateY(${currentY}px)`;
+        requestAnimationFrame(step);
+      } else {
+        // Ease into target
+        const easeElapsed = elapsed - fastDuration;
+        const easeProgress = Math.min(easeElapsed / easeDuration, 1);
+        const eased = easeOutCubic(easeProgress);
+
+        // start from currentY, ease to targetY
+        const startY = currentY;
+        const y = startY + (targetY - startY) * eased;
+        reelEl.style.transform = `translateY(${y}px)`;
+
+        if (easeProgress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          reelEl.style.transform = `translateY(${targetY}px)`;
+          if (onDone) onDone();
+        }
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── LOADING ──
+  function startLoading() {
+    const txt = document.getElementById('loadingTxt');
+    const bar = document.getElementById('loadBar');
+
+    // Reset & build reels
+    const r1 = document.getElementById('reel1');
+    const r2 = document.getElementById('reel2');
+    buildReel(r1, SYMBOLS[0]);
+    buildReel(r2, SYMBOLS[1]);
+
+    // Reset bar
+    bar.style.animation = 'none';
+    bar.offsetHeight;
+    bar.style.animation = 'load-progress 1.9s ease-out forwards';
+
+    txt.innerHTML = '<strong>오늘의 럭키 스팟 분석 중...</strong>';
+
+    // Spin reel 1 (longer)
+    spinReel(r1, SYMBOLS[0], TARGETS[0], 1700, null);
+    // Spin reel 2 (slightly delayed, shorter)
+    setTimeout(() => {
+      spinReel(r2, SYMBOLS[1], TARGETS[1], 1400, null);
+    }, 150);
+
+    // Text update mid-way
+    setTimeout(() => {
+      txt.innerHTML = '<strong>럭키 스팟 발견!</strong> 잠깐만요...';
+    }, 1200);
+
+    // Go to result
+    setTimeout(() => goStep(3), 2000);
+  }
+
+  // ── TAB SWITCH ──
+  const content = {
+    subway: {
+      tag: '🚇 &nbsp;2호선',
+      number: '2<span style="font-family:\'Noto Sans KR\'; font-size:28px; font-weight:900; color:var(--text-muted);">-</span>1<span class="unit"> 칸</span>',
+      desc: '오늘은 2호선 <strong>[2-1]</strong> 칸에 탑승해 보세요.<br>출입문 쪽에 기대어 가면, 막혀있던 <span class="keyword">업무 아이디어</span>가 번쩍 떠오르는 날입니다.',
+      tags: '<span class="ftag hot">🔥 업무운 상승</span><span class="ftag gold">💡 아이디어운</span><span class="ftag">🍀 귀인 출현</span>'
+    },
+    bus: {
+      tag: '🚌 &nbsp;버스',
+      number: '오른쪽<span class="unit" style="font-family:\'Noto Sans KR\'; font-size:22px;"> 창가</span>',
+      desc: '오늘은 버스 <strong>[오른쪽 창가 좌석]</strong>을 사수하세요!<br>아침 햇살을 받으며 이동하면 <span class="keyword">뜻밖의 귀인</span>을 마주칠 수 있습니다.',
+      tags: '<span class="ftag hot">🌅 대인운 최고</span><span class="ftag gold">💰 금전운 상승</span><span class="ftag">☀️ 오늘의 에너지</span>'
+    }
+  };
+
+  function switchTab(type) {
+    document.getElementById('tabSubway').classList.toggle('active', type === 'subway');
+    document.getElementById('tabBus').classList.toggle('active', type === 'bus');
+
+    const c = content[type];
+    const card = document.getElementById('resultCard');
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(8px)';
+    card.style.transition = 'opacity 0.25s, transform 0.25s';
+
+    setTimeout(() => {
+      document.getElementById('transportTag').innerHTML = c.tag;
+      document.getElementById('spotNumber').innerHTML = c.number;
+      document.getElementById('spotDesc').innerHTML = c.desc;
+      document.getElementById('fortuneTags').innerHTML = c.tags;
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, 200);
+  }
+
+  // ── CONFETTI ──
+  function spawnConfetti() {
+    const wrap = document.getElementById('confettiWrap');
+    wrap.innerHTML = '';
+    const colors = ['#00e5b4','#ffd166','#ff6b6b','#a78bfa','#60a5fa','#fff'];
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-delay: ${Math.random() * 0.8}s;
+        animation-duration: ${1.5 + Math.random() * 1}s;
+        width: ${6 + Math.random() * 6}px;
+        height: ${6 + Math.random() * 6}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      `;
+      wrap.appendChild(el);
+    }
+  }
+</script>
+</body>
+</html>
